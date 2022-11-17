@@ -86,3 +86,4 @@ This is an example of how to list things you need to use the software and how to
   INSERT INTO `customers` (`id`, `first_name`, `last_name`, `email`) VALUES ('3', 'Test3', 'Customer', 'test@customer.com');
 
 
+* use postamn collection `Orders API.postman_collection.json` at the root directory to import postman collections of the API
