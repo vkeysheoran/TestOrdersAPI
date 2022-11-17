@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="orders" defaultIdMethod="native">
+  <table name="orders" phpName="Orders">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+    <column name="delivery_address" type="varchar" size="255" required="true" />
+    <column name="billing_address" type="varchar" size="255" required="true" />
+    <column name="expected_delivery" type="date" required="true"/>
+    <column name="customer_id" type="integer" required="true"/>
+    <foreign-key foreignTable = "customers">
+      <reference local="customer_id" foreign="id" />
+    </foreign-key>
+    <column name="order_items" type="integer" required="true"/>
+    <column name="status" type="integer" required="true"/>
+  </table>
+  <table name="customers" phpName="Customers">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+    <column name="first_name" type="varchar" size="128" required="true"/>
+    <column name="last_name" type="varchar" size="128" required="true"/>
+    <column name="email" type="varchar" size="128" required="true"/>
+  </table>
+  <table name="items" phpName="Items">
+   <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+   <column name="name" type="varchar" size="128" required="true" />
+  </table>
+</database>
