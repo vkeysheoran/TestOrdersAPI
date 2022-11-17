@@ -80,4 +80,9 @@ This is an example of how to list things you need to use the software and how to
   * vendor/bin/propel sql:build
   * vendor/bin/propel sql:insert
   * vendor/bin/propel config:convert
+* insert in Customers table before usage of Orders API because of foreign key contraint :
+  INSERT INTO `customers` (`id`, `first_name`, `last_name`, `email`) VALUES ('1', 'Test', 'Customer', 'test@customer.com');
+  INSERT INTO `customers` (`id`, `first_name`, `last_name`, `email`) VALUES ('2', 'Test2', 'Customer', 'test@customer.com');
+  INSERT INTO `customers` (`id`, `first_name`, `last_name`, `email`) VALUES ('3', 'Test3', 'Customer', 'test@customer.com');
+
 
