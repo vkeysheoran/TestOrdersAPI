@@ -1,0 +1,82 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Orders API",
+		"_postman_id": "c37e294d-9c08-c442-05d9-fd21d62d7184",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Update Order",
+			"request": {
+				"url": "localhost:8888/orders/v1/index.php",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"order_id\": 6,\n\t\"expected_delivery\":\"11/25/2022\",\n\t\"delivery_address\": \"Delhi\",\n\t\"billing_address\": \"Gurgaon\",\n\t\"customer_id\" : 1,\n\t\"order_items\": {\n\t\t\"id\":1,\n\t\t\"qty\": 5\n\t},\n\t\"status\": 0\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order",
+			"request": {
+				"url": "localhost:8888/orders/v1/index.php",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"expected_delivery\":\"11/25/2022\",\n\t\"delivery_address\": \"Gujrat\",\n\t\"billing_address\": \"Ahmdabad\",\n\t\"customer_id\" : 1,\n\t\"order_items\": {\n\t\t\"id\":1,\n\t\t\"qty\": 5\n\t},\n\t\"status\":1\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Orders",
+			"request": {
+				"url": {
+					"raw": "localhost:8888/orders/v1/index.php?order_id=6",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"orders",
+						"v1",
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "order_id",
+							"value": "6",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
