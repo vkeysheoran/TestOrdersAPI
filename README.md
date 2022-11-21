@@ -87,3 +87,10 @@ This is an example of how to list things you need to use the software and how to
 
 
 * use postamn collection `Orders API.postman_collection.json` at the root directory to import postman collections of the API
+
+## Added task scheduler python script
+* 
+  ```sh
+  root/index.py
+  ```
+  is added for delayed orders scheduling with sample limit of 5 seconds for demonstartion , you can extend to the time / data as per requirenments
