@@ -17,6 +17,7 @@ CREATE TABLE `orders`
     `expected_delivery` DATE NOT NULL,
     `customer_id` INTEGER NOT NULL,
     `order_items` INTEGER NOT NULL,
+    `is_delayed` INTEGER DEFAULT 0 NOT NULL,
     `status` INTEGER NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `orders_fi_b94313` (`customer_id`),

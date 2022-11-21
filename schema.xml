@@ -10,6 +10,7 @@
       <reference local="customer_id" foreign="id" />
     </foreign-key>
     <column name="order_items" type="integer" required="true"/>
+    <column name="is_delayed" type="integer" defaultValue="0" required="true"/>
     <column name="status" type="integer" required="true"/>
   </table>
   <table name="customers" phpName="Customers">

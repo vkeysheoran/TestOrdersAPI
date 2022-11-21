@@ -63,7 +63,7 @@ class OrdersTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 7;
+    public const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class OrdersTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 7;
+    public const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the id field
@@ -106,6 +106,11 @@ class OrdersTableMap extends TableMap
     public const COL_ORDER_ITEMS = 'orders.order_items';
 
     /**
+     * the column name for the is_delayed field
+     */
+    public const COL_IS_DELAYED = 'orders.is_delayed';
+
+    /**
      * the column name for the status field
      */
     public const COL_STATUS = 'orders.status';
@@ -124,11 +129,11 @@ class OrdersTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'DeliveryAddress', 'BillingAddress', 'ExpectedDelivery', 'CustomerId', 'OrderItems', 'Status', ],
-        self::TYPE_CAMELNAME     => ['id', 'deliveryAddress', 'billingAddress', 'expectedDelivery', 'customerId', 'orderItems', 'status', ],
-        self::TYPE_COLNAME       => [OrdersTableMap::COL_ID, OrdersTableMap::COL_DELIVERY_ADDRESS, OrdersTableMap::COL_BILLING_ADDRESS, OrdersTableMap::COL_EXPECTED_DELIVERY, OrdersTableMap::COL_CUSTOMER_ID, OrdersTableMap::COL_ORDER_ITEMS, OrdersTableMap::COL_STATUS, ],
-        self::TYPE_FIELDNAME     => ['id', 'delivery_address', 'billing_address', 'expected_delivery', 'customer_id', 'order_items', 'status', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+        self::TYPE_PHPNAME       => ['Id', 'DeliveryAddress', 'BillingAddress', 'ExpectedDelivery', 'CustomerId', 'OrderItems', 'IsDelayed', 'Status', ],
+        self::TYPE_CAMELNAME     => ['id', 'deliveryAddress', 'billingAddress', 'expectedDelivery', 'customerId', 'orderItems', 'isDelayed', 'status', ],
+        self::TYPE_COLNAME       => [OrdersTableMap::COL_ID, OrdersTableMap::COL_DELIVERY_ADDRESS, OrdersTableMap::COL_BILLING_ADDRESS, OrdersTableMap::COL_EXPECTED_DELIVERY, OrdersTableMap::COL_CUSTOMER_ID, OrdersTableMap::COL_ORDER_ITEMS, OrdersTableMap::COL_IS_DELAYED, OrdersTableMap::COL_STATUS, ],
+        self::TYPE_FIELDNAME     => ['id', 'delivery_address', 'billing_address', 'expected_delivery', 'customer_id', 'order_items', 'is_delayed', 'status', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, ]
     ];
 
     /**
@@ -140,11 +145,11 @@ class OrdersTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'DeliveryAddress' => 1, 'BillingAddress' => 2, 'ExpectedDelivery' => 3, 'CustomerId' => 4, 'OrderItems' => 5, 'Status' => 6, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'deliveryAddress' => 1, 'billingAddress' => 2, 'expectedDelivery' => 3, 'customerId' => 4, 'orderItems' => 5, 'status' => 6, ],
-        self::TYPE_COLNAME       => [OrdersTableMap::COL_ID => 0, OrdersTableMap::COL_DELIVERY_ADDRESS => 1, OrdersTableMap::COL_BILLING_ADDRESS => 2, OrdersTableMap::COL_EXPECTED_DELIVERY => 3, OrdersTableMap::COL_CUSTOMER_ID => 4, OrdersTableMap::COL_ORDER_ITEMS => 5, OrdersTableMap::COL_STATUS => 6, ],
-        self::TYPE_FIELDNAME     => ['id' => 0, 'delivery_address' => 1, 'billing_address' => 2, 'expected_delivery' => 3, 'customer_id' => 4, 'order_items' => 5, 'status' => 6, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'DeliveryAddress' => 1, 'BillingAddress' => 2, 'ExpectedDelivery' => 3, 'CustomerId' => 4, 'OrderItems' => 5, 'IsDelayed' => 6, 'Status' => 7, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'deliveryAddress' => 1, 'billingAddress' => 2, 'expectedDelivery' => 3, 'customerId' => 4, 'orderItems' => 5, 'isDelayed' => 6, 'status' => 7, ],
+        self::TYPE_COLNAME       => [OrdersTableMap::COL_ID => 0, OrdersTableMap::COL_DELIVERY_ADDRESS => 1, OrdersTableMap::COL_BILLING_ADDRESS => 2, OrdersTableMap::COL_EXPECTED_DELIVERY => 3, OrdersTableMap::COL_CUSTOMER_ID => 4, OrdersTableMap::COL_ORDER_ITEMS => 5, OrdersTableMap::COL_IS_DELAYED => 6, OrdersTableMap::COL_STATUS => 7, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'delivery_address' => 1, 'billing_address' => 2, 'expected_delivery' => 3, 'customer_id' => 4, 'order_items' => 5, 'is_delayed' => 6, 'status' => 7, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, ]
     ];
 
     /**
@@ -199,6 +204,14 @@ class OrdersTableMap extends TableMap
         'COL_ORDER_ITEMS' => 'ORDER_ITEMS',
         'order_items' => 'ORDER_ITEMS',
         'orders.order_items' => 'ORDER_ITEMS',
+        'IsDelayed' => 'IS_DELAYED',
+        'Orders.IsDelayed' => 'IS_DELAYED',
+        'isDelayed' => 'IS_DELAYED',
+        'orders.isDelayed' => 'IS_DELAYED',
+        'OrdersTableMap::COL_IS_DELAYED' => 'IS_DELAYED',
+        'COL_IS_DELAYED' => 'IS_DELAYED',
+        'is_delayed' => 'IS_DELAYED',
+        'orders.is_delayed' => 'IS_DELAYED',
         'Status' => 'STATUS',
         'Orders.Status' => 'STATUS',
         'status' => 'STATUS',
@@ -230,6 +243,7 @@ class OrdersTableMap extends TableMap
         $this->addColumn('expected_delivery', 'ExpectedDelivery', 'DATE', true, null, null);
         $this->addForeignKey('customer_id', 'CustomerId', 'INTEGER', 'customers', 'id', true, null, null);
         $this->addColumn('order_items', 'OrderItems', 'INTEGER', true, null, null);
+        $this->addColumn('is_delayed', 'IsDelayed', 'INTEGER', true, null, 0);
         $this->addColumn('status', 'Status', 'INTEGER', true, null, null);
     }
 
@@ -397,6 +411,7 @@ class OrdersTableMap extends TableMap
             $criteria->addSelectColumn(OrdersTableMap::COL_EXPECTED_DELIVERY);
             $criteria->addSelectColumn(OrdersTableMap::COL_CUSTOMER_ID);
             $criteria->addSelectColumn(OrdersTableMap::COL_ORDER_ITEMS);
+            $criteria->addSelectColumn(OrdersTableMap::COL_IS_DELAYED);
             $criteria->addSelectColumn(OrdersTableMap::COL_STATUS);
         } else {
             $criteria->addSelectColumn($alias . '.id');
@@ -405,6 +420,7 @@ class OrdersTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.expected_delivery');
             $criteria->addSelectColumn($alias . '.customer_id');
             $criteria->addSelectColumn($alias . '.order_items');
+            $criteria->addSelectColumn($alias . '.is_delayed');
             $criteria->addSelectColumn($alias . '.status');
         }
     }
@@ -430,6 +446,7 @@ class OrdersTableMap extends TableMap
             $criteria->removeSelectColumn(OrdersTableMap::COL_EXPECTED_DELIVERY);
             $criteria->removeSelectColumn(OrdersTableMap::COL_CUSTOMER_ID);
             $criteria->removeSelectColumn(OrdersTableMap::COL_ORDER_ITEMS);
+            $criteria->removeSelectColumn(OrdersTableMap::COL_IS_DELAYED);
             $criteria->removeSelectColumn(OrdersTableMap::COL_STATUS);
         } else {
             $criteria->removeSelectColumn($alias . '.id');
@@ -438,6 +455,7 @@ class OrdersTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.expected_delivery');
             $criteria->removeSelectColumn($alias . '.customer_id');
             $criteria->removeSelectColumn($alias . '.order_items');
+            $criteria->removeSelectColumn($alias . '.is_delayed');
             $criteria->removeSelectColumn($alias . '.status');
         }
     }

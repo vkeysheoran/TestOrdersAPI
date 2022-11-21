@@ -108,6 +108,14 @@ abstract class Orders implements ActiveRecordInterface
     protected $order_items;
 
     /**
+     * The value for the is_delayed field.
+     *
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $is_delayed;
+
+    /**
      * The value for the status field.
      *
      * @var        int
@@ -128,10 +136,23 @@ abstract class Orders implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
+     */
+    public function applyDefaultValues(): void
+    {
+        $this->is_delayed = 0;
+    }
+
+    /**
      * Initializes internal state of Base\Orders object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -426,6 +447,16 @@ abstract class Orders implements ActiveRecordInterface
     }
 
     /**
+     * Get the [is_delayed] column value.
+     *
+     * @return int
+     */
+    public function getIsDelayed()
+    {
+        return $this->is_delayed;
+    }
+
+    /**
      * Get the [status] column value.
      *
      * @return int
@@ -560,6 +591,26 @@ abstract class Orders implements ActiveRecordInterface
     }
 
     /**
+     * Set the value of [is_delayed] column.
+     *
+     * @param int $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setIsDelayed($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->is_delayed !== $v) {
+            $this->is_delayed = $v;
+            $this->modifiedColumns[OrdersTableMap::COL_IS_DELAYED] = true;
+        }
+
+        return $this;
+    }
+
+    /**
      * Set the value of [status] column.
      *
      * @param int $v New value
@@ -589,6 +640,10 @@ abstract class Orders implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues(): bool
     {
+            if ($this->is_delayed !== 0) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     }
@@ -636,7 +691,10 @@ abstract class Orders implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : OrdersTableMap::translateFieldName('OrderItems', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_items = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : OrdersTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : OrdersTableMap::translateFieldName('IsDelayed', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->is_delayed = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : OrdersTableMap::translateFieldName('Status', TableMap::TYPE_PHPNAME, $indexType)];
             $this->status = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
@@ -646,7 +704,7 @@ abstract class Orders implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = OrdersTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = OrdersTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Orders'), 0, $e);
@@ -882,6 +940,9 @@ abstract class Orders implements ActiveRecordInterface
         if ($this->isColumnModified(OrdersTableMap::COL_ORDER_ITEMS)) {
             $modifiedColumns[':p' . $index++]  = 'order_items';
         }
+        if ($this->isColumnModified(OrdersTableMap::COL_IS_DELAYED)) {
+            $modifiedColumns[':p' . $index++]  = 'is_delayed';
+        }
         if ($this->isColumnModified(OrdersTableMap::COL_STATUS)) {
             $modifiedColumns[':p' . $index++]  = 'status';
         }
@@ -913,6 +974,9 @@ abstract class Orders implements ActiveRecordInterface
                         break;
                     case 'order_items':
                         $stmt->bindValue($identifier, $this->order_items, PDO::PARAM_INT);
+                        break;
+                    case 'is_delayed':
+                        $stmt->bindValue($identifier, $this->is_delayed, PDO::PARAM_INT);
                         break;
                     case 'status':
                         $stmt->bindValue($identifier, $this->status, PDO::PARAM_INT);
@@ -998,6 +1062,9 @@ abstract class Orders implements ActiveRecordInterface
                 return $this->getOrderItems();
 
             case 6:
+                return $this->getIsDelayed();
+
+            case 7:
                 return $this->getStatus();
 
             default:
@@ -1034,7 +1101,8 @@ abstract class Orders implements ActiveRecordInterface
             $keys[3] => $this->getExpectedDelivery(),
             $keys[4] => $this->getCustomerId(),
             $keys[5] => $this->getOrderItems(),
-            $keys[6] => $this->getStatus(),
+            $keys[6] => $this->getIsDelayed(),
+            $keys[7] => $this->getStatus(),
         ];
         if ($result[$keys[3]] instanceof \DateTimeInterface) {
             $result[$keys[3]] = $result[$keys[3]]->format('Y-m-d');
@@ -1116,6 +1184,9 @@ abstract class Orders implements ActiveRecordInterface
                 $this->setOrderItems($value);
                 break;
             case 6:
+                $this->setIsDelayed($value);
+                break;
+            case 7:
                 $this->setStatus($value);
                 break;
         } // switch()
@@ -1163,7 +1234,10 @@ abstract class Orders implements ActiveRecordInterface
             $this->setOrderItems($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setStatus($arr[$keys[6]]);
+            $this->setIsDelayed($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setStatus($arr[$keys[7]]);
         }
 
         return $this;
@@ -1225,6 +1299,9 @@ abstract class Orders implements ActiveRecordInterface
         }
         if ($this->isColumnModified(OrdersTableMap::COL_ORDER_ITEMS)) {
             $criteria->add(OrdersTableMap::COL_ORDER_ITEMS, $this->order_items);
+        }
+        if ($this->isColumnModified(OrdersTableMap::COL_IS_DELAYED)) {
+            $criteria->add(OrdersTableMap::COL_IS_DELAYED, $this->is_delayed);
         }
         if ($this->isColumnModified(OrdersTableMap::COL_STATUS)) {
             $criteria->add(OrdersTableMap::COL_STATUS, $this->status);
@@ -1322,6 +1399,7 @@ abstract class Orders implements ActiveRecordInterface
         $copyObj->setExpectedDelivery($this->getExpectedDelivery());
         $copyObj->setCustomerId($this->getCustomerId());
         $copyObj->setOrderItems($this->getOrderItems());
+        $copyObj->setIsDelayed($this->getIsDelayed());
         $copyObj->setStatus($this->getStatus());
         if ($makeNew) {
             $copyObj->setNew(true);
@@ -1420,9 +1498,11 @@ abstract class Orders implements ActiveRecordInterface
         $this->expected_delivery = null;
         $this->customer_id = null;
         $this->order_items = null;
+        $this->is_delayed = null;
         $this->status = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

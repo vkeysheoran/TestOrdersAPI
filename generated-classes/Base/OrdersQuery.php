@@ -25,6 +25,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrdersQuery orderByExpectedDelivery($order = Criteria::ASC) Order by the expected_delivery column
  * @method     ChildOrdersQuery orderByCustomerId($order = Criteria::ASC) Order by the customer_id column
  * @method     ChildOrdersQuery orderByOrderItems($order = Criteria::ASC) Order by the order_items column
+ * @method     ChildOrdersQuery orderByIsDelayed($order = Criteria::ASC) Order by the is_delayed column
  * @method     ChildOrdersQuery orderByStatus($order = Criteria::ASC) Order by the status column
  *
  * @method     ChildOrdersQuery groupById() Group by the id column
@@ -33,6 +34,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrdersQuery groupByExpectedDelivery() Group by the expected_delivery column
  * @method     ChildOrdersQuery groupByCustomerId() Group by the customer_id column
  * @method     ChildOrdersQuery groupByOrderItems() Group by the order_items column
+ * @method     ChildOrdersQuery groupByIsDelayed() Group by the is_delayed column
  * @method     ChildOrdersQuery groupByStatus() Group by the status column
  *
  * @method     ChildOrdersQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -64,6 +66,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrders|null findOneByExpectedDelivery(string $expected_delivery) Return the first ChildOrders filtered by the expected_delivery column
  * @method     ChildOrders|null findOneByCustomerId(int $customer_id) Return the first ChildOrders filtered by the customer_id column
  * @method     ChildOrders|null findOneByOrderItems(int $order_items) Return the first ChildOrders filtered by the order_items column
+ * @method     ChildOrders|null findOneByIsDelayed(int $is_delayed) Return the first ChildOrders filtered by the is_delayed column
  * @method     ChildOrders|null findOneByStatus(int $status) Return the first ChildOrders filtered by the status column
  *
  * @method     ChildOrders requirePk($key, ?ConnectionInterface $con = null) Return the ChildOrders by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -75,6 +78,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrders requireOneByExpectedDelivery(string $expected_delivery) Return the first ChildOrders filtered by the expected_delivery column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrders requireOneByCustomerId(int $customer_id) Return the first ChildOrders filtered by the customer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrders requireOneByOrderItems(int $order_items) Return the first ChildOrders filtered by the order_items column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrders requireOneByIsDelayed(int $is_delayed) Return the first ChildOrders filtered by the is_delayed column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrders requireOneByStatus(int $status) Return the first ChildOrders filtered by the status column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildOrders[]|Collection find(?ConnectionInterface $con = null) Return ChildOrders objects based on current ModelCriteria
@@ -92,6 +96,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildOrders> findByCustomerId(int|array<int> $customer_id) Return ChildOrders objects filtered by the customer_id column
  * @method     ChildOrders[]|Collection findByOrderItems(int|array<int> $order_items) Return ChildOrders objects filtered by the order_items column
  * @psalm-method Collection&\Traversable<ChildOrders> findByOrderItems(int|array<int> $order_items) Return ChildOrders objects filtered by the order_items column
+ * @method     ChildOrders[]|Collection findByIsDelayed(int|array<int> $is_delayed) Return ChildOrders objects filtered by the is_delayed column
+ * @psalm-method Collection&\Traversable<ChildOrders> findByIsDelayed(int|array<int> $is_delayed) Return ChildOrders objects filtered by the is_delayed column
  * @method     ChildOrders[]|Collection findByStatus(int|array<int> $status) Return ChildOrders objects filtered by the status column
  * @psalm-method Collection&\Traversable<ChildOrders> findByStatus(int|array<int> $status) Return ChildOrders objects filtered by the status column
  *
@@ -193,7 +199,7 @@ abstract class OrdersQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, delivery_address, billing_address, expected_delivery, customer_id, order_items, status FROM orders WHERE id = :p0';
+        $sql = 'SELECT id, delivery_address, billing_address, expected_delivery, customer_id, order_items, is_delayed, status FROM orders WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -515,6 +521,49 @@ abstract class OrdersQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(OrdersTableMap::COL_ORDER_ITEMS, $orderItems, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the is_delayed column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsDelayed(1234); // WHERE is_delayed = 1234
+     * $query->filterByIsDelayed(array(12, 34)); // WHERE is_delayed IN (12, 34)
+     * $query->filterByIsDelayed(array('min' => 12)); // WHERE is_delayed > 12
+     * </code>
+     *
+     * @param mixed $isDelayed The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByIsDelayed($isDelayed = null, ?string $comparison = null)
+    {
+        if (is_array($isDelayed)) {
+            $useMinMax = false;
+            if (isset($isDelayed['min'])) {
+                $this->addUsingAlias(OrdersTableMap::COL_IS_DELAYED, $isDelayed['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($isDelayed['max'])) {
+                $this->addUsingAlias(OrdersTableMap::COL_IS_DELAYED, $isDelayed['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(OrdersTableMap::COL_IS_DELAYED, $isDelayed, $comparison);
 
         return $this;
     }

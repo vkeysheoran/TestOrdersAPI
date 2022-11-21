@@ -53,6 +53,11 @@ class Api{
     if(!isset($order_data['status'])){
       $errors[] = 'status';
     }
+    if(!isset($order_data['is_delayed'])){
+      $deplayed = 0;
+    }else{
+      $deplayed = 1;
+    }
     if(count($errors) == 0){
       try{
           $order = new Orders();
@@ -62,6 +67,7 @@ class Api{
           $order->setCustomerId($order_data['customer_id']);
           $order->setOrderItems(json_encode($order_data['order_items']));
           $order->setStatus($order_data['status']);
+          $order->setIsDelayed($deplayed);
           $response = $order->save();
           if($response){
             http_response_code(201);
@@ -75,6 +81,8 @@ class Api{
       return $errors;
     }
   }
+
+
   /**
   * @param $_REQUEST $request
   * @return bool | array
